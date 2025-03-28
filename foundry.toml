@@ -1,10 +1,23 @@
 [profile.default]
-solc_version = "0.8.24"
-src = "src"
-out = "out"
 libs = ["lib"]
+optimizer_runs = 100000000
+out = "out"
 remappings = [
-    "evc/=lib/ethereum-vault-connector/src/",
+  "evc/=lib/ethereum-vault-connector/src/",
 ]
+solc_version = "0.8.29"
+src = "src"
 
-# See more config options https://github.com/foundry-rs/foundry/tree/master/config
+[rpc_endpoints]
+arbitrum = "${RPC_URL_ARBITRUM}"
+base = "${RPC_URL_BASE}"
+mainnet = "${RPC_URL_MAINNET}"
+sepolia = "${RPC_URL_SEPOLIA}"
+unichain = "${RPC_URL_UNICHAIN}"
+
+[etherscan]
+arbitrum = {key = "${ARBISCAN_KEY}", url = "https://api.arbiscan.io/api"}
+base = {key = "${BASESCAN_KEY}", url = "https://api.basescan.org/api"}
+mainnet = {key = "${ETHERSCAN_KEY}"}
+sepolia = {key = "${ETHERSCAN_KEY}", url = "https://api-sepolia.etherscan.io/api"}
+unichain = {key = "${UNISCAN_KEY}", url = "https://api.uniscan.xyz/api"}
