@@ -3,12 +3,13 @@ pragma solidity 0.8.24;
 
 import {ERC20} from "solmate/tokens/ERC20.sol";
 import {SafeTransferLib} from "solmate/utils/SafeTransferLib.sol";
-import {EVCUtil} from "evc/utils/EVCUtil.sol";
+
+import {LibMulticaller} from "multicaller/LibMulticaller.sol";
 
 /// @title FeeFlowController
 /// @author Euler Labs (https://eulerlabs.com)
 /// @notice Continuous back to back dutch auctions selling any asset received by this contract
-contract FeeFlowController is EVCUtil {
+contract FeeFlowController {
     using SafeTransferLib for ERC20;
 
     uint256 public constant MIN_EPOCH_PERIOD = 1 hours;
@@ -64,7 +65,6 @@ contract FeeFlowController is EVCUtil {
     }
 
     /// @dev Initializes the FeeFlowController contract with the specified parameters.
-    /// @param evc The address of the Ethereum Vault Connector (EVC) contract.
     /// @param initPrice The initial price for the first epoch.
     /// @param paymentToken_ The address of the payment token.
     /// @param paymentReceiver_ The address of the payment receiver.
@@ -73,14 +73,13 @@ contract FeeFlowController is EVCUtil {
     /// @param minInitPrice_ The minimum allowed initial price for an epoch.
     /// @notice This constructor performs parameter validation and sets the initial values for the contract.
     constructor(
-        address evc,
         uint256 initPrice,
         address paymentToken_,
         address paymentReceiver_,
         uint256 epochPeriod_,
         uint256 priceMultiplier_,
         uint256 minInitPrice_
-    ) EVCUtil(evc) {
+    ) {
         if (initPrice < minInitPrice_) revert InitPriceBelowMin();
         if (initPrice > ABS_MAX_INIT_PRICE) revert InitPriceExceedsMax();
         if (epochPeriod_ < MIN_EPOCH_PERIOD) revert EpochPeriodBelowMin();
@@ -124,7 +123,7 @@ contract FeeFlowController is EVCUtil {
 
         if (uint16(epochId) != slot0Cache.epochId) revert EpochIdMismatch();
 
-        address sender = _msgSender();
+        address sender = LibMulticaller.senderOrSigner();
 
         paymentAmount = getPriceFromCache(slot0Cache);
 

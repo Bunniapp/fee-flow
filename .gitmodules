@@ -4,6 +4,6 @@
 [submodule "lib/solmate"]
 	path = lib/solmate
 	url = https://github.com/transmissions11/solmate
-[submodule "lib/ethereum-vault-connector"]
-	path = lib/ethereum-vault-connector
-	url = https://github.com/euler-xyz/ethereum-vault-connector
+[submodule "lib/multicaller"]
+	path = lib/multicaller
+	url = https://github.com/vectorized/multicaller
